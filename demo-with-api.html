@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Widget with API Integration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #4a6cf7;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        h2 {
+            margin-bottom: 1rem;
+            color: #4a6cf7;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        
+        code {
+            font-family: monospace;
+        }
+        
+        .api-config {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button {
+            background-color: #4a6cf7;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #3b5de7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Chatbot Widget Demo with API Integration</h1>
+            <p>This demo shows how to integrate the chatbot widget with your custom API endpoint.</p>
+        </header>
+        
+        <div class="demo-section">
+            <h2>API Configuration</h2>
+            <p>Enter your API endpoint and API key below to connect the chatbot to your backend:</p>
+            
+            <div class="api-config">
+                <label for="api-endpoint">API Endpoint:</label>
+                <input type="text" id="api-endpoint" placeholder="https://your-chatbot-api.com/chat">
+                
+                <label for="api-key">API Key (optional):</label>
+                <input type="text" id="api-key" placeholder="your-api-key">
+                
+                <button id="apply-config">Apply Configuration</button>
+            </div>
+            
+            <p>Current configuration:</p>
+            <pre><code id="current-config">
+{
+    "apiEndpoint": null,
+    "apiKey": null,
+    "botName": "AI Assistant",
+    "botAvatar": "https://via.placeholder.com/30",
+    "chatbotAccentColor": "#4a6cf7"
+}
+            </code></pre>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Integration Code</h2>
+            <p>Here's the code to add the chatbot widget to your website:</p>
+            
+            <pre><code>
+&lt;!-- Add the chatbot widget script to your HTML --&gt;
+&lt;script src="chatbot-widget.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    // Initialize the chatbot with your configuration
+    document.addEventListener('DOMContentLoaded', function() {
+        ChatbotWidget.init({
+            apiEndpoint: 'https://your-chatbot-api.com/chat',
+            apiKey: 'your-api-key',
+            botName: 'AI Assistant',
+            chatbotAccentColor: '#4a6cf7'
+        });
+    });
+&lt;/script&gt;
+            </code></pre>
+        </div>
+        
+        <div class="demo-section">
+            <h2>API Requirements</h2>
+            <p>Your API should accept POST requests with this JSON format:</p>
+            
+            <pre><code>
+// Request format
+{
+    "message": "User's message here"
+}
+
+// Expected response format
+{
+    "response": "Bot's reply here"
+}
+            </code></pre>
+            
+            <p>The widget also accepts these alternative response field names: <code>reply</code>, <code>message</code></p>
+        </div>
+    </div>
+    
+    <!-- Chatbot Widget Script -->
+    <script src="chatbot-widget.js"></script>
+    
+    <script>
+        // Initialize chatbot with default configuration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize with required parameters
+            ChatbotWidget.init({
+                chatbot_id: 'BUS-1143',
+                botName: 'Sarah',
+                initialMessage: 'Hello I am Sarah, your cleaning assistant! How can I help you today?'
+            });
+            
+            // Update configuration when Apply button is clicked
+            document.getElementById('apply-config').addEventListener('click', function() {
+                const businessId = document.getElementById('business-id').value;
+                const botName = document.getElementById('bot-name').value;
+                const initialMessage = document.getElementById('initial-message').value;
+                
+                // Update configuration
+                ChatbotWidget.updateConfig({
+                    businessId: businessId || 'BUS-1143',
+                    botName: botName || 'Sarah',
+                    initialMessage: initialMessage || 'Hello I am Sarah, your cleaning assistant! How can I help you today?'
+                });
+                
+                // Show success message
+                alert('Configuration applied! The chatbot is now connected to your API.');
+            });
+        });
+    </script>
+</body>
+</html> 
