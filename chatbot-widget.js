@@ -610,134 +610,6 @@
         if (!chatMessages) console.error('Chat messages element not found!');
         
         let isOpen = false;
-        let previousMessagesLoaded = false;
-        
-        // Load previous messages from the API
-        async function loadPreviousMessages() {
-            if (previousMessagesLoaded) {
-                return;
-            }
-            
-            try {
-                // Create loading indicator
-                const loadingElement = document.createElement('div');
-                loadingElement.className = 'loading-indicator';
-                loadingElement.textContent = 'Loading previous messages...';
-                loadingElement.style.textAlign = 'center';
-                loadingElement.style.padding = '10px';
-                loadingElement.style.color = '#888';
-                loadingElement.style.fontSize = '12px';
-                
-                // Clear existing messages and add loading indicator
-                while (chatMessages.firstChild) {
-                    chatMessages.removeChild(chatMessages.firstChild);
-                }
-                chatMessages.appendChild(loadingElement);
-                
-                // Build the URL with query parameters
-                const url = config.apiEndpoint;
-                
-                // Use POST instead of GET as a workaround for CORS and 404 issues
-                // Create payload for POST request
-                const payload = {
-                    action: 'get_messages',
-                    session_key: config.sessionKey,
-                    chatbot_id: config.chatbot_id
-                };
-
-                console.log('Using POST for getting messages with payload:', payload);
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-                
-                if (!response.ok) {
-                    console.error(`Error fetching messages: ${response.status} ${response.statusText}`);
-                    // Instead of throwing, we'll try to get the text to see what's being returned
-                    const errorText = await response.text();
-                    console.log('Error response content:', errorText.substring(0, 500)); // Log first 500 chars
-                    throw new Error(`Failed to load previous messages: ${response.status}`);
-                }
-                
-                // Before parsing as JSON, check if the response starts with HTML
-                const contentType = response.headers.get('content-type');
-                console.log('Response content type:', contentType);
-                
-                // Get the raw text first to debug
-                const responseText = await response.clone().text();
-                
-                // Check if response starts with HTML
-                if (responseText.trim().startsWith('<!DOCTYPE') || responseText.trim().startsWith('<html')) {
-                    console.error('Received HTML instead of JSON:', responseText.substring(0, 500));
-                    throw new Error('Received HTML instead of JSON response');
-                }
-                
-                // Now try to parse as JSON
-                let data;
-                try {
-                    data = JSON.parse(responseText);
-                    console.log('Parsed data:', data);
-                } catch (parseError) {
-                    console.error('JSON parse error:', parseError);
-                    console.log('Raw response:', responseText.substring(0, 500));
-                    throw parseError;
-                }
-                
-                // Remove loading indicator
-                if (loadingElement.parentNode) {
-                    loadingElement.parentNode.removeChild(loadingElement);
-                }
-                
-                // Display messages - handle different possible response formats
-                let messagesDisplayed = 0;
-                
-                // Check if the API returned a "No messages found" response
-                if (data.messages.length === 0) {
-                    // No messages found, will show initial message below
-                    messagesDisplayed = 0;
-                } else {
-                    // Standard format with messages array
-                    data.messages.forEach(msg => {
-                        // Skip messages with 'tool' role
-                        if (msg.role === 'tool') return;
-                        
-                        const sender = msg.role === 'user' ? 'user' : 'bot';
-                        const text = msg.content || '';
-                        const timestamp = msg.created_at ? new Date(msg.created_at) : new Date();
-                        if (text) {
-                            addMessage(text, sender, timestamp);
-                            messagesDisplayed++;
-                        }
-                    });
-                } 
-                // If no messages were displayed, show initial message
-                if (messagesDisplayed === 0 && config.initialMessage) {
-                    addMessage(config.initialMessage, 'bot');
-                }
-                
-                previousMessagesLoaded = true;
-            } catch (error) {
-                console.error('Error loading previous messages:', error);
-                
-                // Remove loading indicator if exists
-                const loadingElement = document.querySelector('.loading-indicator');
-                if (loadingElement) {
-                    loadingElement.parentNode.removeChild(loadingElement);
-                }
-                
-                // Show initial message if no other messages exist
-                if (chatMessages.children.length === 0 && config.initialMessage) {
-                    addMessage(config.initialMessage, 'bot');
-                }
-                
-                previousMessagesLoaded = true;
-            }
-        }
         
         // Toggle chat
         function toggleChat() {
@@ -748,8 +620,10 @@
             if (isOpen) {
                 chatInput.focus();
                 
-                // Load previous messages when opening the chat
-                loadPreviousMessages();
+                // Show initial message when opening the chat
+                if (chatMessages.children.length === 0 && config.initialMessage) {
+                    addMessage(config.initialMessage, 'bot');
+                }
             } else {
             }
         }
