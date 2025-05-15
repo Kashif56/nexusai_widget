@@ -696,16 +696,13 @@
                 // Display messages - handle different possible response formats
                 let messagesDisplayed = 0;
                 
-                // Determine if the response is an array or an object with a messages property
-                const messages = Array.isArray(data) ? data : (data.messages || []);
-                
-                // Check if there are any messages
-                if (messages.length === 0) {
+                // Check if the API returned a "No messages found" response
+                if (data.messages.length === 0) {
                     // No messages found, will show initial message below
                     messagesDisplayed = 0;
                 } else {
-                    // Process the messages
-                    messages.forEach(msg => {
+                    // Standard format with messages array
+                    data.messages.forEach(msg => {
                         // Skip messages with 'tool' role
                         if (msg.role === 'tool') return;
                         
@@ -717,7 +714,7 @@
                             messagesDisplayed++;
                         }
                     });
-                }
+                } 
                 // If no messages were displayed, show initial message
                 if (messagesDisplayed === 0 && config.initialMessage) {
                     addMessage(config.initialMessage, 'bot');
