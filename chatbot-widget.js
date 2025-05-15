@@ -676,9 +676,9 @@
                         // Skip messages with 'tool' role
                         if (msg.role === 'tool') return;
                         
-                        const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
-                        const text = msg.text || msg.content || msg.message || '';
-                        const timestamp = msg.timestamp ? new Date(msg.timestamp) : new Date();
+                        const sender = msg.role === 'user' ? 'user' : 'bot';
+                        const text = msg.content || '';
+                        const timestamp = msg.created_at ? new Date(msg.created_at) : new Date();
                         if (text) {
                             addMessage(text, sender, timestamp);
                             messagesDisplayed++;
@@ -690,9 +690,9 @@
                         // Skip messages with 'tool' role
                         if (msg.role === 'tool') return;
                         
-                        const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
-                        const text = msg.text || msg.content || msg.message || '';
-                        const timestamp = msg.timestamp ? new Date(msg.timestamp) : new Date();
+                        const sender = msg.role === 'user' ? 'user' : 'bot';
+                        const text = msg.content || '';
+                        const timestamp = msg.created_at ? new Date(msg.created_at) : new Date();
                         if (text) {
                             addMessage(text, sender, timestamp);
                             messagesDisplayed++;
@@ -704,15 +704,13 @@
                         // Skip messages with 'tool' role
                         if (msg.role === 'tool') return;
                         
-                        const sender = msg.sender === 'user' || msg.role === 'user' ? 'user' : 'bot';
-                        const text = msg.text || msg.content || msg.message || '';
+                        const sender = msg.role === 'user' ? 'user' : 'bot';
+                        const text = msg.content || '';
                         
                         // Handle timestamp format from created_at (YYYY-MM-DD HH:MM:SS)
                         let timestamp;
                         if (msg.created_at) {
                             timestamp = new Date(msg.created_at.replace(' ', 'T'));
-                        } else if (msg.timestamp) {
-                            timestamp = new Date(msg.timestamp);
                         } else {
                             timestamp = new Date();
                         }
