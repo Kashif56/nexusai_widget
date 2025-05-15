@@ -637,24 +637,53 @@
                 // Build the URL with query parameters
                 const url = config.apiEndpoint;
                 
+                // Restore all required parameters
                 const queryParams = new URLSearchParams({
-                    session_key: config.sessionKey
+                    action: 'get_messages',
+                    session_key: config.sessionKey,
+                    chatbot_id: config.chatbot_id
                 }).toString();
 
-                console.log(queryParams);
+                console.log('Request URL:', `${url}?${queryParams}`);
                 
                 const response = await fetch(`${url}?${queryParams}`, {
                     method: 'GET',
                     headers: {
-                        'accept': 'application/json'
+                        'Accept': 'application/json'
                     }
-                })
+                });
                 
-                if (!response.ok) console.log("Error in Fecthing Messages")
-
-                const data = await response.json()
+                if (!response.ok) {
+                    console.error(`Error fetching messages: ${response.status} ${response.statusText}`);
+                    // Instead of throwing, we'll try to get the text to see what's being returned
+                    const errorText = await response.text();
+                    console.log('Error response content:', errorText.substring(0, 500)); // Log first 500 chars
+                    throw new Error(`Failed to load previous messages: ${response.status}`);
+                }
                 
-                console.log(data);
+                // Before parsing as JSON, check if the response starts with HTML
+                const contentType = response.headers.get('content-type');
+                console.log('Response content type:', contentType);
+                
+                // Get the raw text first to debug
+                const responseText = await response.clone().text();
+                
+                // Check if response starts with HTML
+                if (responseText.trim().startsWith('<!DOCTYPE') || responseText.trim().startsWith('<html')) {
+                    console.error('Received HTML instead of JSON:', responseText.substring(0, 500));
+                    throw new Error('Received HTML instead of JSON response');
+                }
+                
+                // Now try to parse as JSON
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                    console.log('Parsed data:', data);
+                } catch (parseError) {
+                    console.error('JSON parse error:', parseError);
+                    console.log('Raw response:', responseText.substring(0, 500));
+                    throw parseError;
+                }
                 
                 // Remove loading indicator
                 if (loadingElement.parentNode) {
