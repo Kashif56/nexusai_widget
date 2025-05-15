@@ -638,7 +638,6 @@
                 const url = config.apiEndpoint;
                 
                 const queryParams = new URLSearchParams({
-                    action: 'get_messages',
                     session_key: config.sessionKey,
                     chatbot_id: config.chatbot_id
                 }).toString();
