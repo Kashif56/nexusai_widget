@@ -644,7 +644,10 @@
                 console.log(queryParams);
                 
                 const response = await fetch(`${url}?${queryParams}`, {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'accept': 'application/json'
+                    }
                 })
                 .then(response => response.json())
                 .catch(error => console.error(error));
