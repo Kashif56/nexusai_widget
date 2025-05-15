@@ -645,10 +645,7 @@
                 console.log(queryParams);
                 
                 const response = await fetch(`${url}?${queryParams}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
+                    method: 'GET'
                 });
 
                 console.log(response);
