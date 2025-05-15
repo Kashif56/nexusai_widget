@@ -649,10 +649,10 @@
                         'accept': 'application/json'
                     }
                 })
-                .then(response => response.json())
+                .then(res => res.json())
                 .catch(error => console.error(error));
 
-                const data = response;
+                const data = res;
                 
                 console.log(data);
                 
