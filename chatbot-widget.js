@@ -657,6 +657,8 @@
                 
                 const data = await response.json();
                 
+                console.log(data);
+                
                 // Remove loading indicator
                 if (loadingElement.parentNode) {
                     loadingElement.parentNode.removeChild(loadingElement);
