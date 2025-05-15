@@ -636,15 +636,14 @@
                 
                 // Build the URL with query parameters
                 const url = config.apiEndpoint;
-                // Remove trailing slash if present before adding query parameters
-                const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+                
                 const queryParams = new URLSearchParams({
                     action: 'get_messages',
                     session_key: config.sessionKey,
                     chatbot_id: config.chatbot_id
                 }).toString();
                 
-                const response = await fetch(`${cleanUrl}?${queryParams}`, {
+                const response = await fetch(`${url}?${queryParams}`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
