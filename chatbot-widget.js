@@ -642,10 +642,14 @@
                     session_key: config.sessionKey,
                     chatbot_id: config.chatbot_id
                 }).toString();
+
+                console.log(queryParams);
                 
                 const response = await fetch(`${url}?${queryParams}`, {
                     method: 'GET'
                 });
+
+                console.log(response);
                 
                 if (!response.ok) {
                     throw new Error(`Failed to load previous messages: ${response.status}`);
