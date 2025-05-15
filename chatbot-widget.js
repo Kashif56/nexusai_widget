@@ -867,7 +867,7 @@
                 // Use businessId from config with session key
                 const payload = {
                     message: message,
-                    business_id: config.chatbot_id,
+                    chatbot_id: config.chatbot_id,
                     session_key: config.sessionKey
                 };
                 
