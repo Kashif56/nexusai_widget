@@ -644,10 +644,7 @@
                 }).toString();
                 
                 const response = await fetch(`${url}?${queryParams}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    method: 'GET'
                 });
                 
                 if (!response.ok) {
