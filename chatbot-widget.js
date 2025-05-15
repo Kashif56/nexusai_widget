@@ -637,20 +637,23 @@
                 // Build the URL with query parameters
                 const url = config.apiEndpoint;
                 
-                // Restore all required parameters
-                const queryParams = new URLSearchParams({
+                // Use POST instead of GET as a workaround for CORS and 404 issues
+                // Create payload for POST request
+                const payload = {
                     action: 'get_messages',
                     session_key: config.sessionKey,
                     chatbot_id: config.chatbot_id
-                }).toString();
+                };
 
-                console.log('Request URL:', `${url}?${queryParams}`);
+                console.log('Using POST for getting messages with payload:', payload);
                 
-                const response = await fetch(`${url}?${queryParams}`, {
-                    method: 'GET',
+                const response = await fetch(url, {
+                    method: 'POST',
                     headers: {
+                        'Content-Type': 'application/json',
                         'Accept': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify(payload)
                 });
                 
                 if (!response.ok) {
