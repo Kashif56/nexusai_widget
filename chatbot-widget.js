@@ -662,10 +662,10 @@
                 let messagesDisplayed = 0;
                 
                 // Check if the API returned a "No messages found" response
-                if (data.error === 'No messages found' && data.status === 'success') {
+                if (data.messages.length === 0) {
                     // No messages found, will show initial message below
                     messagesDisplayed = 0;
-                } else if (data.messages && Array.isArray(data.messages) && data.messages.length > 0) {
+                } else {
                     // Standard format with messages array
                     data.messages.forEach(msg => {
                         // Skip messages with 'tool' role
@@ -679,44 +679,7 @@
                             messagesDisplayed++;
                         }
                     });
-                } else if (data.conversation && Array.isArray(data.conversation) && data.conversation.length > 0) {
-                    // Alternate format with conversation array
-                    data.conversation.forEach(msg => {
-                        // Skip messages with 'tool' role
-                        if (msg.role === 'tool') return;
-                        
-                        const sender = msg.role === 'user' ? 'user' : 'bot';
-                        const text = msg.content || '';
-                        const timestamp = msg.created_at ? new Date(msg.created_at) : new Date();
-                        if (text) {
-                            addMessage(text, sender, timestamp);
-                            messagesDisplayed++;
-                        }
-                    });
-                } else if (Array.isArray(data) && data.length > 0) {
-                    // Direct array format
-                    data.forEach(msg => {
-                        // Skip messages with 'tool' role
-                        if (msg.role === 'tool') return;
-                        
-                        const sender = msg.role === 'user' ? 'user' : 'bot';
-                        const text = msg.content || '';
-                        
-                        // Handle timestamp format from created_at (YYYY-MM-DD HH:MM:SS)
-                        let timestamp;
-                        if (msg.created_at) {
-                            timestamp = new Date(msg.created_at.replace(' ', 'T'));
-                        } else {
-                            timestamp = new Date();
-                        }
-                        
-                        if (text) {
-                            addMessage(text, sender, timestamp);
-                            messagesDisplayed++;
-                        }
-                    });
                 } 
-                
                 // If no messages were displayed, show initial message
                 if (messagesDisplayed === 0 && config.initialMessage) {
                     addMessage(config.initialMessage, 'bot');
