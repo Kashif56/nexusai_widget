@@ -645,15 +645,11 @@
                 
                 const response = await fetch(`${url}?${queryParams}`, {
                     method: 'GET'
-                });
+                })
+                .then(response => response.json())
+                .catch(error => console.error(error));
 
-                console.log(response);
-                
-                if (!response.ok) {
-                    throw new Error(`Failed to load previous messages: ${response.status}`);
-                }
-                
-                const data = await response.json();
+                const data = response;
                 
                 console.log(data);
                 
