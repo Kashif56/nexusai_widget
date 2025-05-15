@@ -6,7 +6,7 @@
     // Configuration options with defaults
     const config = {
         // Static configuration (not modifiable by website owners)
-        apiEndpoint: 'https://nexusai.up.railway.app/ai-agent/api/chat/',
+        apiEndpoint: 'https://a1b1-39-47-51-227.ngrok-free.app/chat/api/chat/',
         chatbotAccentColor: '#4a6cf7',
         position: 'right',
         width: '400px',
