@@ -649,10 +649,10 @@
                         'accept': 'application/json'
                     }
                 })
-                .then(res => res.json())
-                .catch(error => console.error(error));
+                
+                if (!response.ok) console.log("Error in Fecthing Messages")
 
-                const data = res;
+                const data = await response.json()
                 
                 console.log(data);
                 
